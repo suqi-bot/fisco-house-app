@@ -1,0 +1,61 @@
+#通用信息，指定生效的环境
+#多环境下的共性的属性
+#如果特定环境中的配置和通用信息冲突了，特定环境中的配置生效
+spring:
+  profiles:
+    active: dev
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:8801/big_event
+    username: root
+    password: 123456
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true #开启驼峰命名和下划线命名的自动转换
+
+fisco:
+  url: http://192.168.198.10:5002/WeBASE-Front/trans/handle
+  nodeList: 192.168.198.10:20200
+  groupId: 1
+  certPath: conf,src/main/resources/conf
+  abiPath: abi,src/main/resources/abi
+  binPath: bin/ecc,src/main/resources/bin/ecc
+  contractAddress:
+    HouseLease: "0xbb056827fca02cff8dc2a8121a7949a61a461ac4"
+    HouseInformation_CONTRACT: "0x1f5ed878b0250c2ba28028d61ae1ca1832a1fe12"
+  account:
+    accountAddress: account,src/main/resources/account
+    #accountFilePath: account/admin_key_0x3177e325478b2c3ea151c289f2ad1351e17cb21f.pem,src/main/resources/account/admin_key_0x3177e325478b2c3ea151c289f2ad1351e17cb21f.pem
+    accountFilePaths: account/,src/main/resources/account/
+---
+
+#开发环境
+spring:
+  config:
+    activate:
+      on-profile: dev
+server:
+  port: 8081
+---
+
+#测试环境
+spring:
+  config:
+    activate:
+      on-profile: test
+server:
+  port: 8082
+---
+
+#生产环境
+spring:
+  config:
+    activate:
+      on-profile: pro
+server:
+  port: 8083
