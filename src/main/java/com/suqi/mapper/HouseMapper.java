@@ -22,5 +22,6 @@ public interface HouseMapper {
     Integer update(House house);
     @Delete("delete from house where id=#{id} and owner_address=#{ownerAddress}")
     Integer delete(String ownerAddress, Integer houseId);
-
+    @Select("select * from house where owner_address = #{ownerAddress}")
+    List<House> getHouseByUserAddress(String ownerAddress);
 }

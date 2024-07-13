@@ -38,4 +38,9 @@ public class HouseServiceImpl implements HouseService {
     public Integer delete(String ownerAddress, Integer houseId) {
         return houseMapper.delete(ownerAddress, houseId);
     }
+
+    @Override
+    public List<House> getHouseByUserAddress(String ownerAddress) {
+        return houseMapper.getHouseByUserAddress(ownerAddress);
+    }
 }

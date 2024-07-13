@@ -23,7 +23,6 @@ import org.fisco.bcos.sdk.transaction.model.exception.ContractException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -32,8 +31,7 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
-@Controller
-@CrossOrigin
+@RestController
 @RequestMapping("/house")
 public class IndexController {
 
@@ -72,9 +70,8 @@ public class IndexController {
     /**
      * 查询房产信息
      */
-    @ResponseBody
-    @CrossOrigin
-    @RequestMapping(path = "/getOwnedHouses", produces = MediaType.APPLICATION_JSON_VALUE)
+
+    @GetMapping(path = "/getOwnedHouses")
     public Result<List<HouseData>>  getOwnedHouses(@RequestBody JSONObject jsonParam) throws Exception {
         String houseOwner = (String) jsonParam.get("address");
 
@@ -121,10 +118,10 @@ public class IndexController {
     /**
      * 创建房产
      */
-    @ResponseBody
-    @CrossOrigin
+
+
     @PostMapping("/createHourse")
-    public Result<JSONObject> createHourse(House house) throws Exception {
+    public Result<JSONObject> createHourse(@RequestBody House house) throws Exception {
         JSONObject outPut = new JSONObject();
         String address = house.getOwnerAddress();
         String description = house.getHouseName();
@@ -153,8 +150,7 @@ public class IndexController {
     /**
      * 授权房产
      */
-    @ResponseBody
-    @CrossOrigin
+
     @RequestMapping(path = "/approve", produces = MediaType.APPLICATION_JSON_VALUE)
     public Result<JSONObject> approve(@RequestBody JSONObject jsonParam) throws Exception {
         JSONObject outPut = new JSONObject();
@@ -175,8 +171,7 @@ public class IndexController {
     }
 
     //合同列表
-    @ResponseBody
-    @CrossOrigin
+
     @RequestMapping(path = "/getLandlordContracts", produces = MediaType.APPLICATION_JSON_VALUE)
     public Result<List<LeaseContract>> getLandlordContracts(@RequestBody JSONObject jsonParam) throws Exception {
         String _landlord = (String) jsonParam.get("landlord");
@@ -219,8 +214,7 @@ public class IndexController {
     /**
      * 创建合同
      */
-    @ResponseBody
-    @CrossOrigin
+
     @RequestMapping(path = "/addRentalContract", produces = MediaType.APPLICATION_JSON_VALUE)
     public Result<JSONObject> addRentalContract(@RequestBody JSONObject jsonParam) throws Exception {
         JSONObject outPut = new JSONObject();
@@ -268,8 +262,7 @@ public class IndexController {
      * @return
      * @throws ContractException
      */
-    @ResponseBody
-    @CrossOrigin
+
     @RequestMapping(path = "/signContract", produces = MediaType.APPLICATION_JSON_VALUE)
     public Result<JSONObject> signContract(@RequestBody JSONObject jsonParam) throws Exception {
         JSONObject outPut = new JSONObject();
@@ -292,8 +285,7 @@ public class IndexController {
 
 
     //待签署列表
-    @ResponseBody
-    @CrossOrigin
+
     @RequestMapping(path = "/getLandlordContractsnosign", produces = MediaType.APPLICATION_JSON_VALUE)
     public Result<List<LeaseContract>> getLandlordContractsnosign(@RequestBody JSONObject jsonParam) throws Exception {
         String _landlord = (String) jsonParam.get("landlord");
@@ -348,8 +340,7 @@ public class IndexController {
     }
 
     //有效合同
-    @ResponseBody
-    @CrossOrigin
+
     @RequestMapping(path = "/getLandlordContractsactive", produces = MediaType.APPLICATION_JSON_VALUE)
     public Result<List<LeaseContract>> getLandlordContractsactive(@RequestBody JSONObject jsonParam) throws Exception {
 
@@ -392,8 +383,7 @@ public class IndexController {
 
 
     //无效合同
-    @ResponseBody
-    @CrossOrigin
+
     @RequestMapping(path = "/getLandlordContractsnoactive", produces = MediaType.APPLICATION_JSON_VALUE)
     public Result<List<LeaseContract>> getLandlordContractsnoactive(@RequestBody JSONObject jsonParam) throws Exception {
         String _landlord = jsonParam.get("landlord").toString();
@@ -435,8 +425,7 @@ public class IndexController {
     }
 
     //租客查看合同列表
-    @ResponseBody
-    @CrossOrigin
+
     @RequestMapping(path = "/getTenantContracts", produces = MediaType.APPLICATION_JSON_VALUE)
     public Result<List<LeaseContract>> getTenantContracts(@RequestBody JSONObject jsonParam) throws Exception {
         String _tenant = (String) jsonParam.get("tenant");
@@ -475,8 +464,7 @@ public class IndexController {
     }
 
     //缴纳房租
-    @ResponseBody
-    @CrossOrigin
+
     @RequestMapping(path = "/payRent", produces = MediaType.APPLICATION_JSON_VALUE)
     public Result<JSONObject> payRent(@RequestBody JSONObject jsonParam) throws Exception {
         JSONObject outPut = new JSONObject();
@@ -492,8 +480,7 @@ public class IndexController {
     }
 
     //账户充值
-    @ResponseBody
-    @CrossOrigin
+
     @RequestMapping(path = "/transferAccounts", produces = MediaType.APPLICATION_JSON_VALUE)
     public Result<JSONObject> transferAccounts(@RequestBody JSONObject jsonParam) throws Exception {
         JSONObject outPut = new JSONObject();
@@ -509,8 +496,7 @@ public class IndexController {
 
 
     //房东取消合同
-    @ResponseBody
-    @CrossOrigin
+
     @RequestMapping(path = "/terminateContractByLandlord", produces = MediaType.APPLICATION_JSON_VALUE)
     public Result<JSONObject> terminateContractByLandlord(@RequestBody JSONObject jsonParam) throws Exception {
         JSONObject outPut = new JSONObject();
@@ -524,8 +510,7 @@ public class IndexController {
     }
 
     //租户取消合同
-    @ResponseBody
-    @CrossOrigin
+
     @RequestMapping(path = "/terminateContractByTenant", produces = MediaType.APPLICATION_JSON_VALUE)
     public Result<JSONObject> terminateContractByTenant(@RequestBody JSONObject jsonParam) throws Exception {
         JSONObject outPut = new JSONObject();

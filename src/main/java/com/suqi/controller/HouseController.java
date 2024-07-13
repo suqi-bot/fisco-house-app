@@ -25,6 +25,12 @@ public class HouseController {
         House house = houseService.getHouseById(id);
         return Result.success(house);
     }
+
+    @GetMapping("/getbyuseraddress")
+    public Result<List<House>> getHouseByUserAddress(String ownerAddress){
+        List<House> house = houseService.getHouseByUserAddress(ownerAddress);
+        return Result.success(house);
+    }
     @PostMapping
     public Result<Integer> setHouse(House house){
         Integer res = houseService.set(house);

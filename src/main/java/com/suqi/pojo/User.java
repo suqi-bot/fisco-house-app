@@ -27,6 +27,8 @@ public class User {
     @Email
     private String email;//邮箱
     private String userPic;//用户头像地址
+    private String address;//用户合约地址
+    private Integer state;//用户状态
     private LocalDateTime createTime;//创建时间
     private LocalDateTime updateTime;//更新时间
 }

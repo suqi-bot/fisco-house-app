@@ -12,4 +12,6 @@ public interface HouseService {
 
     Integer update(House house);
     Integer delete(String ownerAddress, Integer houseId);
+
+    List<House> getHouseByUserAddress(String ownerAddress);
 }
