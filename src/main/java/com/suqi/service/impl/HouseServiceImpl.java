@@ -36,7 +36,7 @@ public class HouseServiceImpl implements HouseService {
 
     @Override
     public Integer delete(String ownerAddress, Integer houseId) {
-        return houseMapper.delete(ownerAddress, houseId);
+        return houseMapper.delete(houseId, ownerAddress);
     }
 
     @Override

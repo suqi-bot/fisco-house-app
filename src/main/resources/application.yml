@@ -26,8 +26,8 @@ fisco:
   abiPath: abi,src/main/resources/abi
   binPath: bin/ecc,src/main/resources/bin/ecc
   contractAddress:
-    HouseLease: "0xbb056827fca02cff8dc2a8121a7949a61a461ac4"
-    HouseInformation_CONTRACT: "0x1f5ed878b0250c2ba28028d61ae1ca1832a1fe12"
+    HouseLease: "0xf2e365e636e28020a9ccb92a94d3cc70fa50838a"
+    HouseInformation_CONTRACT: "0x8b37c72d50ae25e13870a361a9d334c5cadc6a38"
   account:
     accountAddress: account,src/main/resources/account
     #accountFilePath: account/admin_key_0x3177e325478b2c3ea151c289f2ad1351e17cb21f.pem,src/main/resources/account/admin_key_0x3177e325478b2c3ea151c289f2ad1351e17cb21f.pem

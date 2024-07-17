@@ -30,9 +30,11 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @RestController
-@RequestMapping("/house")
+@RequestMapping("/fisco")
 public class IndexController {
 
     @Autowired
@@ -71,7 +73,7 @@ public class IndexController {
      * 查询房产信息
      */
 
-    @GetMapping(path = "/getOwnedHouses")
+    @PostMapping(path = "/getOwnedHouses")
     public Result<List<HouseData>>  getOwnedHouses(@RequestBody JSONObject jsonParam) throws Exception {
         String houseOwner = (String) jsonParam.get("address");
 
@@ -131,7 +133,6 @@ public class IndexController {
                 abiHouseInformation, binHouseInformation);
 
         JSONArray array = new JSONArray();
-        //选手填写部分
         //1. 封装创建房产参数
         array.add(address);
         array.add(description);
@@ -141,7 +142,14 @@ public class IndexController {
                 ("HouseInformation", HouseInformation_CONTRACT,
                         "createHouse", array);
         outPut.put("message", transactionResponse.getReceiptMessages());
+
         //3. 存入数据库
+        String str = transactionResponse.getValues();
+        String regEx = "[^0-9]";
+        Pattern p = Pattern.compile(regEx);
+        Matcher m = p.matcher(str);
+        String result = m.replaceAll("").trim();
+        house.setHouseId(Integer.valueOf(result));
         houseMapper.set(house);
 
         return Result.success(outPut);
@@ -150,11 +158,11 @@ public class IndexController {
     /**
      * 授权房产
      */
-
-    @RequestMapping(path = "/approve", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(path = "/approve")
     public Result<JSONObject> approve(@RequestBody JSONObject jsonParam) throws Exception {
         JSONObject outPut = new JSONObject();
         int houseId = (Integer) jsonParam.get("houseId");
+        String ownerAddress = (String) jsonParam.get("ownerAddress");
         AssembleTransactionProcessor sdk = sdk("HouseInformation",
                 abiHouseInformation, binHouseInformation);
         JSONArray array = new JSONArray();
@@ -162,6 +170,7 @@ public class IndexController {
         //选手填写部分：封装授权房产参数
         array.add(spender);
         array.add(houseId);
+        array.add(ownerAddress);
         //调用授权合约
         TransactionResponse transactionResponse = sdk.sendTransactionAndGetResponseByContractLoader
                 ("HouseInformation", HouseInformation_CONTRACT,
@@ -172,7 +181,7 @@ public class IndexController {
 
     //合同列表
 
-    @RequestMapping(path = "/getLandlordContracts", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(path = "/getLandlordContracts")
     public Result<List<LeaseContract>> getLandlordContracts(@RequestBody JSONObject jsonParam) throws Exception {
         String _landlord = (String) jsonParam.get("landlord");
         JSONArray array = new JSONArray();
@@ -201,10 +210,6 @@ public class IndexController {
                 leaseContract.setLandlord(jsonArray.get(1).toString());
                 leaseContract.setTenant(jsonArray.get(2).toString());
                 leaseContract.setSign(Long.valueOf(jsonArray.get(3).toString()));
-                leaseContract.setRentAmount(Long.valueOf(jsonArray.get(4).toString()));
-                leaseContract.setLeaseStartDate(Long.valueOf(jsonArray.get(5).toString()));
-                leaseContract.setLeaseEndDate(Long.valueOf(jsonArray.get(6).toString()));
-                leaseContract.setAgreementId(Long.valueOf(jsonArray.get(7).toString()));
                 leaseContracts.add(leaseContract);
             }
         }
@@ -215,20 +220,22 @@ public class IndexController {
      * 创建合同
      */
 
-    @RequestMapping(path = "/addRentalContract", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(path = "/addRentalContract")
     public Result<JSONObject> addRentalContract(@RequestBody JSONObject jsonParam) throws Exception {
         JSONObject outPut = new JSONObject();
         String _tenant = (String) jsonParam.get("tenant");
+        String _houseOwner = (String) jsonParam.get("houseOwner");
         String _rentAmount = jsonParam.get("rentAmount").toString();
         String _leaseStartDate = jsonParam.get("leaseStartDate").toString();
         String _leaseEndDate = jsonParam.get("leaseEndDate").toString();
         //获取房屋编号
-        Integer houseId = (Integer) jsonParam.get("hourseId");
+        Integer houseId = (Integer) jsonParam.get("houseId");
 
         List<Object> list = new ArrayList<>();
         //选手填写部分
         //封装参数
         list.add(houseId);
+        list.add(_houseOwner);
         list.add(_tenant);
         list.add(_rentAmount);
         list.add(_leaseStartDate);
@@ -243,11 +250,11 @@ public class IndexController {
             //选手填写部分
             //将合同数据写入数据库中
             leaseContract.setHourseId(Long.valueOf(houseId));
+            leaseContract.setLandlord(_houseOwner);
             leaseContract.setTenant(_tenant);
             leaseContract.setRentAmount(Long.valueOf(_rentAmount));
             leaseContract.setLeaseStartDate(Long.valueOf(_leaseStartDate));
             leaseContract.setLeaseEndDate(Long.valueOf(_leaseEndDate));
-
             leaseContractMapper.insert(leaseContract);
         }
         outPut.put("message", transactionResponse.getReceiptMessages());
@@ -263,7 +270,7 @@ public class IndexController {
      * @throws ContractException
      */
 
-    @RequestMapping(path = "/signContract", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(path = "/signContract")
     public Result<JSONObject> signContract(@RequestBody JSONObject jsonParam) throws Exception {
         JSONObject outPut = new JSONObject();
         String _agreementId = jsonParam.get("agreementId").toString();

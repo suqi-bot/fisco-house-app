@@ -15,7 +15,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface LeaseContractMapper {
     @Insert("insert into lease_contract(hourseId, landlord, tenant, monthly_rent, deposit_amount, rent_due_date, lease_start_date, lease_end_date) " +
-            "values(#{leaseContract.hourseId}, #{leaseContract.landlord}, #{leaseContract.tenant}, #{leaseContract.rentAmount}, #{leaseContract.depositAmount}, #{leaseContract.rentDueDate}, #{leaseContract.leaseStartDate}, #{leaseContract.leaseEndDate})")
+            "values(#{leaseContract.hourseId}, #{leaseContract.landlord}, #{leaseContract.tenant}, #{leaseContract.rentAmount}, #{leaseContract.depositAmount},#{leaseContract.leaseStartDate},#{leaseContract.leaseStartDate},#{leaseContract.leaseEndDate})")
     public Integer insert(@Param("leaseContract") LeaseContract leaseContract);
 
     @Select("select id, landlord, tenant, monthly_rent, monthlyRent, deposit_amount, rent_due_date," +

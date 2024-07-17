@@ -38,7 +38,7 @@ public class HouseController {
     }
 
     @PutMapping
-    public Result<Integer> updateHouse(House house){
+    public Result<Integer> updateHouse(@RequestBody House house){
         Integer res = houseService.update(house);
         return Result.success(res);
     }

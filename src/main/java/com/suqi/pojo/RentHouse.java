@@ -5,16 +5,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-public class House {
+@AllArgsConstructor
+public class RentHouse {
     private Integer id;
     private Integer houseId;
-    private String houseName;
-    private String houseContext;
-    private String state;
-    private String houseImg;
-    private Integer housePrice;
     private String ownerAddress;
-    private String ownerName;
+    private String tenantAddress;
 }
